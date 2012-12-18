@@ -1,4 +1,4 @@
-/* First try on a mousetrap - basically receive signal from a switch/photocell/something, and activate a servo certain amount */
+/* Angrybird (or any other projectile) launcher.  Basically a catapult. Designed by my 6yr old, decorated by my 4yr old, programmed by me (cutting and pasting code from the web) */
 
 #include <Servo.h> 
 Servo myservo;
@@ -13,29 +13,28 @@ void setup(){
   pinMode(ledPin, OUTPUT);
   Serial.begin(9600);
   myservo.attach(9);
-  myservo.write(91);  
+  // numbers close to 180 mean pin is all the way released
+  // numbers close to 0 mean pin is all the way engaged
+  // 
+  myservo.write(120);  // move pin back out of way
+  delay(3000);
+  myservo.write(70);  // set pin in lock position
 }
 
 void loop(){
   buttonState = digitalRead(buttonPin);
   Serial.print("The button state is ");
   Serial.println(buttonState);
-  if (buttonState == 0 && ignoreButtonPush == false) {
+  if (buttonState == 1 && ignoreButtonPush == false) {
     ignoreButtonPush = true;
     // set trap
     trapSprung();
-    //delay(3000); // simulate move the motor for three second
-    //trapSprung = false;
-    //myservo.write(91);
-    //return;
   }
  }   
 
 void trapSprung() {
   Serial.print("Mouse caught");
   digitalWrite(ledPin, HIGH);
-  myservo.write(100); //start the servo
-  delay(3000);
-  myservo.write(91); //stop the servo
+  myservo.write(120); //release pin
 }
   
