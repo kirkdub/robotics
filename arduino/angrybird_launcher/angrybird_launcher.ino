@@ -35,7 +35,20 @@ void setup(){
 }
 
 void loop(){
-  buttonState = digitalRead(buttonPin);
+  // one option is to read the actual button state from the push switch
+  // we also want to get the "button state" from the proximity sensor.
+  // if either of them goes to button state "1", launch
+  //buttonState = digitalRead(buttonPin);
+  uint8_t val;
+  if (ReadByte(sensorAddr, 0x0, &val) == 0) {
+    if (val & 0x2) {
+      //Serial.println("Nothing detected");
+      buttonState = 0; 
+    } else {
+      //Serial.println("Object detected");
+      buttonState = 1;
+    }
+  }
   Serial.print("The button state is ");
   Serial.println(buttonState);
   if (buttonState == 1 && ignoreButtonPush == false) {
