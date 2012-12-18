@@ -15,10 +15,9 @@ void setup(){
   myservo.attach(9);
   // numbers close to 180 mean pin is all the way released
   // numbers close to 0 mean pin is all the way engaged
-  // 
-  myservo.write(120);  // move pin back out of way
+  myservo.write(120);  // pin unlatched
   delay(3000);
-  myservo.write(70);  // set pin in lock position
+  myservo.write(70);  // pin latched
 }
 
 void loop(){
@@ -27,14 +26,22 @@ void loop(){
   Serial.println(buttonState);
   if (buttonState == 1 && ignoreButtonPush == false) {
     ignoreButtonPush = true;
-    // set trap
     trapSprung();
+  }
+  if (buttonState == 1 && ignoreButtonPush == true) {
+    ignoreButtonPush = false; // now trap is reset
+    trapReset();
   }
  }   
 
 void trapSprung() {
-  Serial.print("Mouse caught");
+  Serial.print("Laucher FIRE");
   digitalWrite(ledPin, HIGH);
-  myservo.write(120); //release pin
+  myservo.write(120); //pin unlatched
 }
   
+void trapReset() {
+  Serial.print("Launcher reloaded");
+  digitalWrite(ledPin, LOW);
+  myservo.write(70); //pin latched
+}
