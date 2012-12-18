@@ -27,10 +27,14 @@ void loop(){
   if (buttonState == 1 && ignoreButtonPush == false) {
     ignoreButtonPush = true;
     trapSprung();
+    delay(3000);
+    buttonState = digitalRead(buttonPin);
   }
   if (buttonState == 1 && ignoreButtonPush == true) {
     ignoreButtonPush = false; // now trap is reset
     trapReset();
+    delay(3000);
+    buttonState = digitalRead(buttonPin);
   }
  }   
 
@@ -38,10 +42,12 @@ void trapSprung() {
   Serial.print("Laucher FIRE");
   digitalWrite(ledPin, HIGH);
   myservo.write(120); //pin unlatched
+  delay(3000);
 }
   
 void trapReset() {
   Serial.print("Launcher reloaded");
   digitalWrite(ledPin, LOW);
   myservo.write(70); //pin latched
+  delay(3000);
 }
