@@ -1,5 +1,7 @@
 /* Angrybird (or any other projectile) launcher.  Basically a catapult. Designed by my 6yr old, decorated by my 4yr old, programmed by me (cutting and pasting code from the web) */
 
+/* add this comment because git (or it's user) is doing something wrong */
+
 #include <Servo.h> 
 #include <Wire.h> 
 
