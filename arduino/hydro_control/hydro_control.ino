@@ -10,6 +10,8 @@ D - get air temp
 int WaterTemp_Pin = 2; //DS18S20 Signal Water temp
 int AC1_pin = 7; // first tail (light)
 int AC2_pin = 8; // second tail (pump)
+bool light_status = 0; // zero is off
+float latest_temp = 0;
 
 //Temperature chip i/o
 OneWire ds(WaterTemp_Pin); // on digital pin 2
@@ -19,6 +21,7 @@ void setup() {
     Serial.write("Power On");
     pinMode(AC1_pin, OUTPUT); //white
     pinMode(AC2_pin, OUTPUT); //yellow
+    // set the time by querying the server every time the thing starts
 }
 
 void loop() {
@@ -36,12 +39,16 @@ void loop() {
     Serial.print(content);
     Serial.println(":ACK");
     digitalWrite (AC1_pin, HIGH);
+    light_status = 1;
+    //Serial.println(light_status);
   }
 
  if (content == "a") {
     Serial.print(content);
     Serial.println(":ACK");
     digitalWrite (AC1_pin, LOW);
+    light_status = 0; // zero is off
+    //Serial.println(light_status);
   }
 
  // Pump Control
@@ -60,11 +67,22 @@ void loop() {
  // Water Temperature
  if (content == "C") {
     float temperature = getTemp();
+    latest_temp = temperature;
     Serial.print(content);
     Serial.print(":");
     Serial.println(temperature);
   }
 
+ // Get Report
+ if (content == "R") {
+    Serial.print(content);
+    Serial.print(":");
+    Serial.println("SENDING_REPORT");
+    Serial.print("Current temp is:");
+    Serial.println(latest_temp);
+    Serial.print("The light is: ");
+    Serial.println(light_status);
+  }
 
 }
 
