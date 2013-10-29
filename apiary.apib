@@ -1,0 +1,276 @@
+HOST: http://localhost/
+
+--- Inventory API Mockup ---
+
+---
+Requests:
+The base URL is https://TBD.foo.com/api/v1
+
+HTTP Verbs:
+  GET
+  POST
+  PUT
+  DELETE
+
+Responses:
+  All response bodies are JSON encoded.
+---
+
+--
+Devices Resources
+The following is a section of resources related to devices
+--
+
+List all devices
+
+Optional "fields" can be appended like: GET /devices?fields=id,name,status,vendor  Defaults to id,name.
+
+GET /devices/
+< 200
+< Content-Type: application/json
+{
+    "devices": [
+        {
+            "id": "1",
+            "name": "router-1.some.com"
+        },
+        {
+            "id": "2",
+            "name": "router-54.some.com"
+        }
+    ]
+}
+
+List a specific device by {id}
+GET /devices/{id}
+< 200
+< Content-Type: application/json
+{ 
+    "devices": [
+        {
+            "id": "1",
+            "name": "router-1.some.com",
+            "manufacturer": "cisco",
+            "site": "pao",
+            "owner": "WAN",
+            "status": "active" }
+    ]
+}
+
+List a specific devices interfaces
+GET /devices/{id}/interfaces/
+< 200
+< Content-Type: application/json
+{
+    "devices": [
+        {
+            "id": "1",
+            "name": "router-1.some.com",
+            "manufacturer": "cisco",
+            "site": "pao",
+            "owner": "WAN",
+            "status": "active",
+            "interfaces": [
+                {
+                    "id": "4332",
+                    "int_name": "eth0.1",
+                    "int_description": "something to nowhere",
+                    "int_status": "ADMIN DOWN"
+                },
+                {
+                    "id": "4333",
+                    "int_name": "eth4.1",
+                    "int_description": "something to somewherwhere",
+                    "int_status": "UP"
+                }
+            ]
+        }
+    ]
+}
+
+List a specific devices modules
+GET /devices/{id}/modules/
+< 200
+< Content-Type: application/json
+{
+    "devices": [
+        {
+            "id": "1",
+            "name": "router-1.some.com",
+            "manufacturer": "cisco",
+            "site": "pao",
+            "owner": "WAN",
+            "status": "active",
+            "modules": [
+                {
+                    "id": "1121",
+                    "mod_name": "Chassis",
+                    "mod_description": "C6500 Chassis",
+                    "mod_model": "6500",
+                    "mod_serial": "BH441234AA",
+                    "mod_version": "REV 12"
+                },
+                {
+                    "id": "1141",
+                    "mod_name": "FPC 0",
+                    "mod_description": "10GE FPC",
+                    "mod_model": "11231",
+                    "mod_serial": "BH4412dfdfdA",
+                    "mod_version": "NULL"
+                }
+            ]
+        }
+    ]
+}
+
+
+List devices based on Query string parameters
+
+Query parameters include:  
+
++ id  
++ name  
+* manufacturer  
+* site  
+* owner  
+* status  
+
+GET /devices{?site,status}
+< 200
+< Content-Type: application/json
+{
+    "devices": [
+        {
+            "id": "1",
+            "name": "router-3.some.com",
+            "manufacturer": "cisco",
+            "site": "pao",
+            "owner": "WAN",
+            "status": "active"
+        },
+        {
+            "id": "3",
+            "name": "router-5.some.com",
+            "manufacturer": "juniper",
+            "site": "pao",
+            "owner": "WAN",
+            "status": "active"
+        },
+        {
+            "id": "27",
+            "name": "router-1923.some.com",
+            "manufacturer": "cisco",
+            "site": "pao",
+            "owner": "WAN",
+            "status": "active"
+        },
+        {
+            "id": "28",
+            "name": "router-44.some.com",
+            "manufacturer": "cisco",
+            "site": "pao",
+            "owner": "WAN",
+            "status": "active"
+        }
+    ]
+}
+
+Add a device
+POST /devices
+> Content-Type: application/json
+{
+    "name": "router-new.some.com",
+    "manufacturer": "cisco",
+    "site": "sjc",
+    "owner": "LAN",
+    "status": "active"
+}
+< 201
+< Content-Type: application/json
+{
+    "id": "54333",
+    "name": "router-new.some.com",
+    "manufacturer": "cisco",
+    "site": "sjc",
+    "owner": "LAN",
+    "status": "active"
+}
+
+
+--
+Sites Resources
+Get list of Company sites including stores, offices, planets, moons, closets, etc
+--
+List all sites
+
+Optional "fields" can be appended by adding fields=<field1,field2,field3>.  Defaults to id,site_name,address.
+
+GET /sites/
+< 200
+< Content-Type: application/json
+{
+    "sites": [
+        {
+            "id": "1",
+            "site_name": "usjun01",
+            "address": "123 Dark St, Juno, AK, US"
+        },
+        {
+            "id": "2",
+            "site_name": "cnnmo01",
+            "address": "888 Lucky Lu, Ningboa, CN"
+        }
+    ]
+}
+
+List a specific site by {id}
+GET /sites/{id}
+< 200
+< Content-Type: application/json
+{ 
+    "sites": [
+        {
+            "id": "1",
+            "site_name": "usjun01",
+            "address": "123 Dark St, Juno, AK, US",
+            "type": "sales",
+            "owner": "sales support",
+            "status": "active" }
+    ]
+}
+
+Add a site
+POST /sites
+> Content-Type: application/json
+{
+    "site_name": "usjun01",
+    "address": "123 Dark St, Juno, AK, US",
+    "type": "sales",
+    "owner": "sales support",
+    "status": "active" }
+}
+< 201
+< Content-Type: application/json
+{
+    "id": "1",
+    "site_name": "usjun01",
+    "address": "123 Dark St, Juno, AK, US",
+    "type": "sales",
+    "owner": "sales support",
+    "status": "active" }
+}
+
+-- 
+Circuits Resources
+Information about circuits
+--
+
+-- 
+Manufacturers Resources
+Information about vendors
+--
+
+-- 
+Models Resources
+Information about hardware models
+--
